@@ -1,3 +1,51 @@
+
+
+
+
+// navbar
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Select all dropdown links with submenus
+  const dropdownLinks = document.querySelectorAll(".dropdown-link > a");
+
+  dropdownLinks.forEach(link => {
+    link.addEventListener("click", function (e) {
+      e.preventDefault(); // Prevent default behavior
+      e.stopPropagation(); // Stop bubbling
+
+      // Toggle the current dropdown
+      const parent = this.parentElement;
+      const dropdown = parent.querySelector(".dropdown");
+
+      // Close all other open dropdowns
+      document.querySelectorAll(".dropdown").forEach(drop => {
+        if (drop !== dropdown) drop.style.display = "none";
+      });
+
+      // Toggle the current dropdown
+      dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+    });
+  });
+
+  // Close dropdowns when clicking outside
+  document.addEventListener("click", () => {
+    document.querySelectorAll(".dropdown").forEach(dropdown => {
+      dropdown.style.display = "none";
+    });
+  });
+});
+
+
+
+
+
+
+
+
+
+
 // animation on scroll
 
 AOS.init({
