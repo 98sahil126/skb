@@ -3,8 +3,9 @@
 
 
 // navbar
+
 document.addEventListener('DOMContentLoaded', function () {
-  // Get all dropdown links
+  // Get all dropdown links in the menu
   const dropdownLinks = document.querySelectorAll('.dropdown-link');
 
   // Loop through each dropdown link to toggle the dropdown visibility
@@ -24,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  // Close the dropdown when clicking outside
+  // Close any open dropdown when clicking outside the menu
   document.addEventListener('click', function () {
     const openDropdowns = document.querySelectorAll('.dropdown');
     openDropdowns.forEach(dropdown => {
@@ -40,6 +41,8 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 });
+
+
 
 
 
