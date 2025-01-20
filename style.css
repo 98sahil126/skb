@@ -550,6 +550,9 @@ section {
     padding: 15px;
 
   }
+ .logo-container {
+    margin-left: 10px;
+  }
 	 .logo{
     width: 250px;
   }
