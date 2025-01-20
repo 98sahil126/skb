@@ -4,48 +4,117 @@
 
 // navbar
 
-document.addEventListener('DOMContentLoaded', function () {
-  // Get all dropdown links in the menu
+document.addEventListener('DOMContentLoaded', function() {
+  // Store references to frequently used elements
+  const navLinks = document.querySelectorAll('.nav-link');
   const dropdownLinks = document.querySelectorAll('.dropdown-link');
+  
+  // Function to close all dropdowns
+  function closeAllDropdowns() {
+      document.querySelectorAll('.dropdown').forEach(dropdown => {
+          dropdown.style.display = 'none';
+      });
+  }
 
-  // Loop through each dropdown link to toggle the dropdown visibility
-  dropdownLinks.forEach(link => {
-    link.addEventListener('click', function (event) {
-      event.stopPropagation(); // Prevent the click from bubbling up
+  // Function to close all child dropdowns of a parent
+  function closeChildDropdowns(parent) {
+      const childDropdowns = parent.querySelectorAll('.dropdown');
+      childDropdowns.forEach(dropdown => {
+          dropdown.style.display = 'none';
+      });
+  }
 
+  // Handle mobile nav link clicks
+  navLinks.forEach(link => {
+      const linkAnchor = link.querySelector('a');
       const dropdown = link.querySelector('.dropdown');
-      if (dropdown) {
-        // Toggle the visibility of the dropdown using inline styles
-        if (dropdown.style.display === 'block') {
-          dropdown.style.display = 'none';  // Hide the dropdown
-        } else {
-          dropdown.style.display = 'block'; // Show the dropdown
-        }
+
+      linkAnchor.addEventListener('click', function(e) {
+          if (window.innerWidth <= 920) {
+              e.preventDefault();
+              e.stopPropagation();
+
+              // Close other top-level dropdowns
+              navLinks.forEach(otherLink => {
+                  if (otherLink !== link) {
+                      const otherDropdown = otherLink.querySelector('.dropdown');
+                      if (otherDropdown) {
+                          otherDropdown.style.display = 'none';
+                      }
+                  }
+              });
+
+              // Toggle current dropdown
+              if (dropdown) {
+                  const isVisible = dropdown.style.display === 'block';
+                  closeAllDropdowns();
+                  dropdown.style.display = isVisible ? 'none' : 'block';
+              }
+          }
+      });
+  });
+
+  // Handle dropdown link clicks
+  dropdownLinks.forEach(link => {
+      const linkAnchor = link.querySelector('a');
+      const subDropdown = link.querySelector('.dropdown');
+
+      linkAnchor.addEventListener('click', function(e) {
+          if (window.innerWidth <= 920) {
+              e.preventDefault();
+              e.stopPropagation();
+
+              // Close sibling dropdowns
+              const siblings = link.parentElement.children;
+              Array.from(siblings).forEach(sibling => {
+                  if (sibling !== link) {
+                      const siblingDropdown = sibling.querySelector('.dropdown');
+                      if (siblingDropdown) {
+                          siblingDropdown.style.display = 'none';
+                      }
+                  }
+              });
+
+              // Toggle current dropdown
+              if (subDropdown) {
+                  const isVisible = subDropdown.style.display === 'block';
+                  subDropdown.style.display = isVisible ? 'none' : 'block';
+              }
+          }
+      });
+  });
+
+  // Close dropdowns when clicking outside
+  document.addEventListener('click', function(e) {
+      if (window.innerWidth <= 920) {
+          if (!e.target.closest('.nav-links')) {
+              closeAllDropdowns();
+          }
       }
-    });
   });
 
-  // Close any open dropdown when clicking outside the menu
-  document.addEventListener('click', function () {
-    const openDropdowns = document.querySelectorAll('.dropdown');
-    openDropdowns.forEach(dropdown => {
-      dropdown.style.display = 'none'; // Hide any open dropdowns
-    });
+  // Handle window resize
+  let resizeTimer;
+  window.addEventListener('resize', function() {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(function() {
+          if (window.innerWidth > 920) {
+              // Reset all dropdown displays
+              document.querySelectorAll('.dropdown').forEach(dropdown => {
+                  dropdown.style = '';
+              });
+          }
+      }, 250);
   });
 
-  // Prevent the event from closing dropdowns when clicking inside a dropdown
-  const dropdowns = document.querySelectorAll('.dropdown');
-  dropdowns.forEach(dropdown => {
-    dropdown.addEventListener('click', function (event) {
-      event.stopPropagation(); // Prevent event bubbling inside dropdown
-    });
+  // Handle hamburger menu checkbox
+  const checkbox = document.getElementById('check');
+  checkbox.addEventListener('change', function() {
+      if (!this.checked) {
+          closeAllDropdowns();
+      }
   });
 });
-
-
-
-
-
 
 
 
