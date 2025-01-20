@@ -3,7 +3,6 @@
 
 
 // navbar
-
 document.addEventListener('DOMContentLoaded', function() {
   // Store references to frequently used elements
   const navLinks = document.querySelectorAll('.nav-link');
@@ -31,25 +30,27 @@ document.addEventListener('DOMContentLoaded', function() {
 
       linkAnchor.addEventListener('click', function(e) {
           if (window.innerWidth <= 920) {
-              e.preventDefault();
-              e.stopPropagation();
-
-              // Close other top-level dropdowns
-              navLinks.forEach(otherLink => {
-                  if (otherLink !== link) {
-                      const otherDropdown = otherLink.querySelector('.dropdown');
-                      if (otherDropdown) {
-                          otherDropdown.style.display = 'none';
-                      }
-                  }
-              });
-
-              // Toggle current dropdown
+              // Only prevent default if there's a dropdown
               if (dropdown) {
+                  e.preventDefault();
+                  e.stopPropagation();
+
+                  // Close other top-level dropdowns
+                  navLinks.forEach(otherLink => {
+                      if (otherLink !== link) {
+                          const otherDropdown = otherLink.querySelector('.dropdown');
+                          if (otherDropdown) {
+                              otherDropdown.style.display = 'none';
+                          }
+                      }
+                  });
+
+                  // Toggle current dropdown
                   const isVisible = dropdown.style.display === 'block';
                   closeAllDropdowns();
                   dropdown.style.display = isVisible ? 'none' : 'block';
               }
+              // If no dropdown, let the link work normally
           }
       });
   });
@@ -61,33 +62,46 @@ document.addEventListener('DOMContentLoaded', function() {
 
       linkAnchor.addEventListener('click', function(e) {
           if (window.innerWidth <= 920) {
-              e.preventDefault();
-              e.stopPropagation();
-
-              // Close sibling dropdowns
-              const siblings = link.parentElement.children;
-              Array.from(siblings).forEach(sibling => {
-                  if (sibling !== link) {
-                      const siblingDropdown = sibling.querySelector('.dropdown');
-                      if (siblingDropdown) {
-                          siblingDropdown.style.display = 'none';
-                      }
-                  }
-              });
-
-              // Toggle current dropdown
+              // Only prevent default if there's a subdropdown
               if (subDropdown) {
+                  e.preventDefault();
+                  e.stopPropagation();
+
+                  // Close sibling dropdowns
+                  const siblings = link.parentElement.children;
+                  Array.from(siblings).forEach(sibling => {
+                      if (sibling !== link) {
+                          const siblingDropdown = sibling.querySelector('.dropdown');
+                          if (siblingDropdown) {
+                              siblingDropdown.style.display = 'none';
+                          }
+                      }
+                  });
+
+                  // Toggle current dropdown
                   const isVisible = subDropdown.style.display === 'block';
                   subDropdown.style.display = isVisible ? 'none' : 'block';
               }
+              // If no subdropdown, let the link work normally
           }
       });
   });
 
+  // Check if an element has a dropdown
+  function hasDropdown(element) {
+      return element.querySelector('.dropdown') !== null;
+  }
+
+  // Check if element is a link without dropdown
+  function isSimpleLink(element) {
+      return element.tagName.toLowerCase() === 'a' && !hasDropdown(element.parentElement);
+  }
+
   // Close dropdowns when clicking outside
   document.addEventListener('click', function(e) {
       if (window.innerWidth <= 920) {
-          if (!e.target.closest('.nav-links')) {
+          // Don't close if clicking a simple link
+          if (!e.target.closest('.nav-links') && !isSimpleLink(e.target)) {
               closeAllDropdowns();
           }
       }
