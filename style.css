@@ -545,6 +545,12 @@ section {
     transform: translateY(15px);
   }
 }
+@media (max-width: 500px){
+  .container {
+    padding: 10px;
+
+  }
+}
 
 /* about us */
 /* Main section styles */
