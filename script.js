@@ -3,30 +3,32 @@
 
 
 // navbar
-
-
 document.addEventListener('DOMContentLoaded', function () {
-  // Get all dropdown buttons and dropdowns
+  // Get all dropdown links
   const dropdownLinks = document.querySelectorAll('.dropdown-link');
 
-  // Loop through each dropdown link to toggle the dropdown
+  // Loop through each dropdown link to toggle the dropdown visibility
   dropdownLinks.forEach(link => {
     link.addEventListener('click', function (event) {
       event.stopPropagation(); // Prevent the click from bubbling up
 
-      // Toggle the 'show' class to display or hide the dropdown
       const dropdown = link.querySelector('.dropdown');
       if (dropdown) {
-        dropdown.classList.toggle('show');
+        // Toggle the visibility of the dropdown using inline styles
+        if (dropdown.style.display === 'block') {
+          dropdown.style.display = 'none';  // Hide the dropdown
+        } else {
+          dropdown.style.display = 'block'; // Show the dropdown
+        }
       }
     });
   });
 
   // Close the dropdown when clicking outside
   document.addEventListener('click', function () {
-    const openDropdowns = document.querySelectorAll('.dropdown.show');
+    const openDropdowns = document.querySelectorAll('.dropdown');
     openDropdowns.forEach(dropdown => {
-      dropdown.classList.remove('show');
+      dropdown.style.display = 'none'; // Hide any open dropdowns
     });
   });
 
@@ -38,6 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 });
+
 
 
 
