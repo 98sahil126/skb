@@ -5,34 +5,36 @@
 // navbar
 
 
+document.addEventListener('DOMContentLoaded', function () {
+  // Get all dropdown buttons and dropdowns
+  const dropdownLinks = document.querySelectorAll('.dropdown-link');
 
-document.addEventListener("DOMContentLoaded", () => {
-  // Select all dropdown links with submenus
-  const dropdownLinks = document.querySelectorAll(".dropdown-link > a");
-
+  // Loop through each dropdown link to toggle the dropdown
   dropdownLinks.forEach(link => {
-    link.addEventListener("click", function (e) {
-      e.preventDefault(); // Prevent default behavior
-      e.stopPropagation(); // Stop bubbling
+    link.addEventListener('click', function (event) {
+      event.stopPropagation(); // Prevent the click from bubbling up
 
-      // Toggle the current dropdown
-      const parent = this.parentElement;
-      const dropdown = parent.querySelector(".dropdown");
-
-      // Close all other open dropdowns
-      document.querySelectorAll(".dropdown").forEach(drop => {
-        if (drop !== dropdown) drop.style.display = "none";
-      });
-
-      // Toggle the current dropdown
-      dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+      // Toggle the 'show' class to display or hide the dropdown
+      const dropdown = link.querySelector('.dropdown');
+      if (dropdown) {
+        dropdown.classList.toggle('show');
+      }
     });
   });
 
-  // Close dropdowns when clicking outside
-  document.addEventListener("click", () => {
-    document.querySelectorAll(".dropdown").forEach(dropdown => {
-      dropdown.style.display = "none";
+  // Close the dropdown when clicking outside
+  document.addEventListener('click', function () {
+    const openDropdowns = document.querySelectorAll('.dropdown.show');
+    openDropdowns.forEach(dropdown => {
+      dropdown.classList.remove('show');
+    });
+  });
+
+  // Prevent the event from closing dropdowns when clicking inside a dropdown
+  const dropdowns = document.querySelectorAll('.dropdown');
+  dropdowns.forEach(dropdown => {
+    dropdown.addEventListener('click', function (event) {
+      event.stopPropagation(); // Prevent event bubbling inside dropdown
     });
   });
 });
